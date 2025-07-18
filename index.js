@@ -5,6 +5,8 @@ import userRouter from "./Roters/userRouter.js";
 import { decode } from "jsonwebtoken";
 import jwt from "jsonwebtoken";
 import productRouter from "./Roters/productRouter.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
@@ -14,7 +16,7 @@ app.use((req, res, next) => {
   const value = req.headers["authorization"];
   if (value != null) {
     const token = value.replace("Bearer ", "");
-    jwt.verify(token, "ABC-123", (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (decoded == null) {
         return res.status(403).json({
           message: "Unauthorized access",
@@ -29,8 +31,7 @@ app.use((req, res, next) => {
   }
 });
 
-const connectionString =
-  "mongodb+srv://admin:123@fullstack-db.a7i51fc.mongodb.net/?retryWrites=true&w=majority&appName=fullstack-db";
+const connectionString =process.env.MONGO_URI;
 
 mongoose.connect(connectionString).then(() => {
   console.log("Connected to MongoDB");

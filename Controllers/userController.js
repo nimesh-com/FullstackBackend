@@ -2,6 +2,7 @@ import User from "../Models/users.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+
 export function createUser(req, res) {
   const passwordHash = bcrypt.hashSync(req.body.password, 10);
 
@@ -47,7 +48,7 @@ export function loginUser(req, res) {
             email: user.email,
             role: user.role,
           },
-          "ABC-123"
+         process.env.JWT_SECRET
         );
 
         res.json({
