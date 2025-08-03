@@ -27,9 +27,10 @@ export async function createProduct(req, res) {
 export async function getProduct(req, res) {
   try {
     if (isAdmin(req)) {
-      const product = await Product.find();
+      const product = await Product.find({});
       return res.json(product);
     } else {
+
       const product = await Product.find({ isAvailable: true });
       return res.json(product);
     }
