@@ -79,3 +79,17 @@ export async function updateProduct(req, res) {
     });
   }
 }
+
+export default async function GetProductInformation(req, res){
+  try {
+    const product = await Product.find({ productId: req.params.productId });
+    return res.json(product);
+  } catch (error) {
+    console.error("Error getting product:", error);
+    return res.status(500).json({
+      message: "Error getting product",
+      error: error,
+    });
+  }
+
+}
