@@ -15,7 +15,6 @@ export async function createProduct(req, res) {
       message: "Product created successfully",
       product: response,
     });
-
   } catch (error) {
     console.error("Error creating product:", error);
     return res.status(500).json({
@@ -31,7 +30,6 @@ export async function getProduct(req, res) {
       const product = await Product.find({});
       return res.json(product);
     } else {
-
       const product = await Product.find({ isAvailable: true });
       return res.json(product);
     }
@@ -82,9 +80,14 @@ export async function updateProduct(req, res) {
   }
 }
 
-export default async function GetProductInformation(req, res){
+export default async function GetProductInformation(req, res) {
   try {
-    const product = await Product.find({ productId: req.params.productId });
+    const productId = req.params.productId;
+    const product = await Product.findOne({ productId });
+
+    if(!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
     return res.json(product);
   } catch (error) {
     console.error("Error getting product:", error);
@@ -93,5 +96,4 @@ export default async function GetProductInformation(req, res){
       error: error,
     });
   }
-
 }
