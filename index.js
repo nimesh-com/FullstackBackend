@@ -7,6 +7,8 @@ import jwt from "jsonwebtoken";
 import productRouter from "./Routers/productRouter.js";
 import dotenv from "dotenv";
 import cors from "cors";
+import orderRouter from "./Routers/orderRouter..js";
+
 dotenv.config();
 
 const app = express();
@@ -39,8 +41,9 @@ mongoose.connect(connectionString).then(() => {
   console.log("Connected to MongoDB");
 });
 
-app.use("/users", userRouter);
-app.use("/products", productRouter);
+app.use("/api/users", userRouter);
+app.use("/api/products", productRouter);
+app.use("/api/orders",orderRouter);
 
 app.listen(5000, () => {
   console.log("Server is running on port 5000");

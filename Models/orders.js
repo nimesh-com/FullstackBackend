@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
-  userID: {
+  orderID: {
     type: String,
     required: true,
     unique: true,
@@ -57,6 +57,11 @@ const orderSchema = new mongoose.Schema({
   note: {
     type: String,
     default: "No additional notes",
+  },
+  total: {
+    type: Number,
+    required: true,
+    default: 0,
   },
 });
 
