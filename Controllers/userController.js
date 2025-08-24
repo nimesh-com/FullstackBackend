@@ -75,3 +75,13 @@ export function isAdmin(req) {
     return false;
   }
 }
+
+export function getUser(req, res) {
+  if(req.user == null){
+    res.status(403).json({
+      message: "Unauthorized"
+    });
+  }else{
+    res.json(req.user);
+  }
+}

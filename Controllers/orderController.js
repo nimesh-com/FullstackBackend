@@ -36,12 +36,13 @@ export async function createOrder(req, res) {
             .status(404)
             .json({ message: "Product not found " + item.productId });
         }
-        item[i] = {
+        items.push({
           productId: product.productId,
           name: product.name,
           price: product.price,
-          quantity: item.quantity,
-        };
+          qty: item.qty,
+          image: product.image[0],
+        });
         total += product.price * item.qty;
       }
     } else {
