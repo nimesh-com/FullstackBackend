@@ -74,15 +74,32 @@ export async function createOrder(req, res) {
 }
 
 export async function getOrders(req, res) {
+  const page = parseInt(req.params.page) || 1; // Default to page 1 if not provided
+  const limit = parseInt(req.params.limit) || 10; // Default to 10 items per page if not provided
+
   try {
     if (req.user.role == "admin") {
-      const orders = await Order.find().sort({ date: -1 });
-      return res.json(orders);
-    } else {
-      const orders = await Order.find({ email: req.user.email }).sort({
-        date: -1,
+      const orderCount = await Order.countDocuments();
+      const totalPages = Math.ceil(orderCount / limit);
+      const orders = await Order.find()
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .sort({ date: -1 });
+      res.json({
+        orders: orders,
+        totalPages: totalPages,
       });
-      return res.json(orders);
+    } else {
+      const orders = await Order.find({ email: req.user.email })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .sort({
+          date: -1,
+        });
+      res.json({
+        orders: orders,
+        totalPages: totalPages,
+      });
     }
   } catch (error) {
     console.error("Error getting orders:", error);
