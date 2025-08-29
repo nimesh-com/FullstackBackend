@@ -86,68 +86,6 @@ export function getUser(req, res) {
   }
 }
 
-/* export async function googleLogin(req, res) {
-  const googleToken = req.body.token;
-  try {
-    const response = await axios.get(
-      "https://www.googleapis.com/oauth2/v3/userinfo",
-      {
-        headers: {
-          Authorization: `Bearer ${googleToken}`,
-        },
-      }
-    );
-
-    const user = User.findOne({ email: response.data.email });
-    if (user) {
-      const token = jwt.sign(
-        {
-          firstname: user.firstname,
-          lastname: user.lastname,
-          email: user.email,
-          role: user.role,
-        },
-        process.env.JWT_SECRET
-      );
-      res.json({
-        token: token,
-        role: user.role,
-        message: "Login Successful",
-      });
-    } else {
-      const userData = {
-        firstname: response.data.given_name,
-        lastname: response.data.family_name,
-        email: response.data.email,
-        password: "123",
-      };
-      const newUser = new User(userData);
-      await newUser.save();
-      const token = jwt.sign(
-        {
-          firstname: newUser.firstname,
-          lastname: newUser.lastname,
-          email: newUser.email,
-          role: "user",
-          isVerified: true,
-          password: "123",
-        },
-        process.env.JWT_SECRET
-      );
-      res.json({
-        token: token,
-        role: "user",
-        message: "Login Successful",
-      });
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      message: "Error logging in with Google",
-    });
-  }
-} */
-
 export async function googleLogin(req, res) {
   const googleToken = req.body.token;
 

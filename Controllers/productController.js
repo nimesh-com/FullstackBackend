@@ -85,7 +85,7 @@ export default async function GetProductInformation(req, res) {
     const productId = req.params.productId;
     const product = await Product.findOne({ productId });
 
-    if(!product) {
+    if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
     return res.json(product);
@@ -93,6 +93,25 @@ export default async function GetProductInformation(req, res) {
     console.error("Error getting product:", error);
     return res.status(500).json({
       message: "Error getting product",
+      error: error,
+    });
+  }
+}
+
+export async function serachProduct(req, res) {
+  const query = req.params.query;
+  try {
+    const products = await Product.find({
+      $or: [
+        { name: { $regex: query, $options: "i" } },
+        { description: { $regex: query, $options: "i" } },
+      ], isAvailable: true
+    });
+    res.json(products);
+  } catch (error) {
+    console.error("Error searching product:", error);
+    return res.status(500).json({
+      message: "Error searching product",
       error: error,
     });
   }
