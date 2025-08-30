@@ -2,6 +2,23 @@ import User from "../Models/users.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import axios from "axios";
+import dotenv from "dotenv";
+import nodemailer from "nodemailer";
+import OTP from "../Models/otp.js";
+dotenv.config();
+
+const pwd = "kdedlshgzmdmchzr";
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: "user.nimesh@gmail.com",  
+    pass: pwd,
+  },
+});
+
 
 export function createUser(req, res) {
   const passwordHash = bcrypt.hashSync(req.body.password, 10);
@@ -151,5 +168,79 @@ export async function googleLogin(req, res) {
     res.status(500).json({
       message: "Error logging in with Google",
     });
+  }
+}
+
+
+export async function SendOTP(req, res) {
+  const email = req.body.email;
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+//delete previous OTP if exists
+try{
+  await OTP.deleteMany({ email: email});
+  const newOTP= new OTP({
+    email:email,
+    otp:otp,
+  });
+  await newOTP.save();
+
+  const message ={
+    from:"user.nimesh@gmail.com",
+    to:email,
+    subject:"Your OTP Code",
+    text:`Your OTP code is ${otp}. It is valid for 10 minutes.`,
+  };
+
+ transporter.sendMail(message,(err,info)=>{
+  if(err){
+    console.log("Error sending OTP email:",err);
+    res.status(500).json({message:"Error sending OTP email"});
+  }else{
+    console.log("OTP email sent:",info.response);
+    res.json({message:"OTP sent successfully"});
+  }
+ });
+}catch(error){
+  console.log("Error sending OTP email:",error);
+  res.status(500).json({message:"Error sending OTP email"});
+}
+}
+
+export async function resetPassword(req, res) {
+  const email = req.body.email;
+  const otp = req.body.otp;
+  const newPassword = req.body.password;
+  if (!newPassword) return res.status(400).json({ message: "Password is required" });
+
+  try {
+    const otpRecord = await OTP.findOne({ email, otp });
+    if (!otpRecord) return res.status(400).json({ message: "Invalid OTP" });
+
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    await User.updateOne({ email }, { password: hashedPassword });
+    await OTP.deleteMany({ email });
+
+    res.json({ message: "Password reset successfully" });
+  } catch (error) {
+    console.log("Error resetting password:", error);
+    res.status(500).json({ message: "Error resetting password" });
+  }
+}
+
+export async function validateOTP(req, res) {
+  const email = req.body.email;
+  const otp = req.body.otp;
+  const newPassword = req.body.password;
+  if (!newPassword) return res.status(400).json({ message: "Password is required" });
+
+  try {
+    const otpRecord = await OTP.findOne({ email, otp });
+    if (!otpRecord) return res.status(400).json({ message: "Invalid OTP" });
+    res.json({ message: "Password reset successfully" });
+  } catch (error) {
+    console.log("Error resetting password:", error);
+    res.status(500).json({ message: "Error resetting password" });
   }
 }
