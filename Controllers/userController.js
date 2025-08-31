@@ -5,7 +5,6 @@ import axios from "axios";
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import OTP from "../Models/otp.js";
-dotenv.config();
 
 const pwd = "kdedlshgzmdmchzr";
 
@@ -177,6 +176,11 @@ export async function SendOTP(req, res) {
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
 //delete previous OTP if exists
 try{
+  const user= await User.findOne({email:email});
+
+  if(!user){
+    return res.status(404).json({message:"User with this email does not exist"});
+  }
   await OTP.deleteMany({ email: email});
   const newOTP= new OTP({
     email:email,

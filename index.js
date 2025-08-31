@@ -43,7 +43,7 @@ mongoose.connect(connectionString).then(() => {
 
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
-app.use("/api/orders",orderRouter);
+app.use("/api/orders", orderRouter);
 
 app.listen(5000, () => {
   console.log("Server is running on port 5000");
