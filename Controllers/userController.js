@@ -5,6 +5,7 @@ import axios from "axios";
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import OTP from "../Models/otp.js";
+import e from "cors";
 
 const pwd = "kdedlshgzmdmchzr";
 
@@ -33,13 +34,14 @@ export function createUser(req, res) {
   user
     .save()
     .then(() => {
-      res.json({
+      res.status(201).json({
         message: "User created successfully",
       });
     })
-    .catch(() => {
-      res.json({
+    .catch((error) => {
+      res.status(409).json({
         message: "Error creating user",
+        error: error,
       });
     });
 }
