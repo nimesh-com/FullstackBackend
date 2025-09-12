@@ -1,4 +1,6 @@
 import Product from "../Models/products.js";
+import Review from "../Models/reviews.js";
+import User from "../Models/users.js";
 import { isAdmin } from "./userController.js";
 
 export async function createProduct(req, res) {
@@ -105,13 +107,70 @@ export async function serachProduct(req, res) {
       $or: [
         { name: { $regex: query, $options: "i" } },
         { description: { $regex: query, $options: "i" } },
-      ], isAvailable: true
+      ],
+      isAvailable: true,
     });
     res.json(products);
   } catch (error) {
     console.error("Error searching product:", error);
     return res.status(500).json({
       message: "Error searching product",
+      error: error,
+    });
+  }
+}
+
+export async function productReview(req, res) {
+  const productId = req.body.productId;
+  const review = req.body.review;
+  const email = req.body.email;
+  const user = await User.findOne({ email: email });
+
+  const reviewData = {
+    productId: productId,
+    userId: user._id,
+    review: review,
+    email: email,
+  };
+  const newReview = new Review(reviewData);
+  try {
+    await newReview.save();
+    res.status(201).json({ message: "Review added successfully" });
+  } catch (error) {
+    console.error("Error adding review:", error);
+    return res.status(500).json({
+      message: "Error adding review",
+      error: error,
+    });
+  }
+}
+
+export async function getReviews(req, res) {
+  const productId = req.params.productId;
+  try {
+    const reviews = await Review.find({ productId })
+      .populate("userId", "firstname lastname email")
+      .sort({ date: -1 });
+    res.json(reviews);
+  } catch (error) {
+    console.error("Error getting reviews:", error);
+    return res.status(500).json({
+      message: "Error getting reviews",
+      error: error,
+    });
+  }
+}
+
+export async function deleteReview(req, res) {
+  const reviewId = req.params.reviewId;
+
+  try {
+    await Review.deleteOne({ _id: reviewId });
+    res.json({ message: "Review deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting review:", error);
+    return res.status(500).json({
+      message: "Error deleting review",
       error: error,
     });
   }
