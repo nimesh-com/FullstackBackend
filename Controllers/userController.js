@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import e from "cors";
 
-import OTP from "../Models/otp.js";
+import OTP from "../Models/OTP.js";
 
 dotenv.config();
 
