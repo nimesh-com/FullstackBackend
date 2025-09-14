@@ -1,11 +1,14 @@
 import User from "../Models/users.js";
 import bcrypt from "bcrypt";
-import OTP from "../Models/otp.js";
 import jwt from "jsonwebtoken";
 import axios from "axios";
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import e from "cors";
+
+import OTP from "../Models/otp.js";
+
+dotenv.config();
 
 const pwd = "kdedlshgzmdmchzr";
 
