@@ -9,6 +9,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import orderRouter from "./Routers/orderRouter..js";
 import reviewRouter from "./Routers/reviews.js";
+import contactUsRouter from "./Routers/contactUsRouter.js";
 
 dotenv.config();
 
@@ -46,6 +47,7 @@ app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/orders", orderRouter);
 app.use("/api/reviews", reviewRouter);
+app.use('/api/contacts',contactUsRouter);
 
 app.listen(5000, () => {
   console.log("Server is running on port 5000");
