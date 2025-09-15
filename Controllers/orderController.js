@@ -71,9 +71,10 @@ export async function createOrder(req, res) {
       phone: req.body.phone,
       orderID: OrderId, // match schema exactly
       items: items,
+      paymentMethod: req.body.paymentMethod,
       total: total,
     });
-
+console.log(order);
     const response = await order.save();
 
     const message = {

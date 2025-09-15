@@ -190,12 +190,42 @@ try{
   });
   await newOTP.save();
 
-  const message ={
-    from:"user.nimesh@gmail.com",
-    to:email,
-    subject:"Your OTP Code",
-    text:`Your OTP code is ${otp}. It is valid for 10 minutes.`,
-  };
+const message = {
+  from: "user.nimesh@gmail.com",
+  to: email,
+  subject: "🔑 Password Reset OTP - LuxeAura",
+  html: `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background: #f9fafb; border-radius: 10px; border: 1px solid #e5e7eb;">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <h2 style="color: #00809D; margin: 0;">Password Reset Request</h2>
+      </div>
+
+      <p style="color: #374151; font-size: 16px;">
+        Hello, <br /><br />
+        We received a request to reset your password. Please use the following <strong>One-Time Password (OTP)</strong> to proceed:
+      </p>
+
+      <div style="text-align: center; margin: 30px 0;">
+        <span style="display: inline-block; background: #00809D; color: #ffffff; font-size: 24px; letter-spacing: 4px; padding: 15px 30px; border-radius: 8px; font-weight: bold;">
+          ${otp}
+        </span>
+      </div>
+
+      <p style="color: #374151; font-size: 14px;">
+        This code is valid for <strong>10 minutes</strong>. Do not share it with anyone for security reasons.  
+      </p>
+
+      <p style="color: #374151; font-size: 14px;">
+        If you did not request a password reset, please ignore this message. Your account is safe.  
+      </p>
+
+      <div style="margin-top: 30px; border-top: 1px solid #e5e7eb; padding-top: 15px; text-align: center; font-size: 12px; color: #6b7280;">
+        Developed by <strong>Nimesh Jayawickrama</strong> <br />
+        LuxeAura Cosmetics © ${new Date().getFullYear()}
+      </div>
+    </div>
+  `,
+};
 
  transporter.sendMail(message,(err,info)=>{
   if(err){
