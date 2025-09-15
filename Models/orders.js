@@ -30,6 +30,10 @@ const orderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  paymentMethod: {
+    type: String,
+    required: true,
+  },
   items: [
     {
       productId: {
