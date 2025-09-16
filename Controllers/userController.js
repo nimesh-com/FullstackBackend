@@ -116,7 +116,7 @@ export function verifyUser(req, res) {
 
     user.save().then(() => {
       // Redirect to frontend dashboard
-      res.redirect(`https://fullstackbackend-2uqv.onrender.com/api/users/login?verified=true`);
+      res.redirect(`https://fullstack-frontend-alpha-wheat.vercel.app/login?verified=true`);
     }).catch((err) => {
       return res.status(500).send("Error verifying user");
     });
