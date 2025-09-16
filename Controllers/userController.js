@@ -52,7 +52,7 @@ export async function createUser(req, res) {
     <h2 style="color: #00809D;">Welcome to Our Platform, ${req.body.firstname}!</h2>
     <p>Thank you for registering. To complete your registration and activate your account, please verify your email by clicking the button below:</p>
     <a 
-      href="https://fullstackbackend-2uqv.onrender.com/verify/${token}" 
+      href="https://fullstackbackend-2uqv.onrender.com/api/users/verify/${token}" 
       style="
         display: inline-block; 
         padding: 12px 25px; 
@@ -116,7 +116,7 @@ export function verifyUser(req, res) {
 
     user.save().then(() => {
       // Redirect to frontend dashboard
-      res.redirect(`https://fullstackbackend-2uqv.onrender.com/login?verified=true`);
+      res.redirect(`https://fullstackbackend-2uqv.onrender.com/api/users/login?verified=true`);
     }).catch((err) => {
       return res.status(500).send("Error verifying user");
     });
