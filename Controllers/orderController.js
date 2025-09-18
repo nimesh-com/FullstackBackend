@@ -119,7 +119,7 @@ console.log(order);
 
       <div style="margin-top: 30px; text-align: center;">
         <p style="font-size: 14px; color: #555;">We’ll notify you once your order is shipped 🚚</p>
-        <a href="https://yourwebsite.com/orders/${OrderId}" 
+        <a href="https://luxeaura-alpha-wheat.vercel.app/dashboard" 
           style="display: inline-block; background: #00809D; color: #fff; padding: 12px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">
           View Order
         </a>
